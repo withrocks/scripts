@@ -1,0 +1,3 @@
+ln -s $(pwd)/git-sync-with-upstream /usr/local/bin/git-sync-with-upstream
+ln -s $(pwd)/git-diff-branches /usr/local/bin/git-diff-branches
+

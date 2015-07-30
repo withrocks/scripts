@@ -1,0 +1,50 @@
+#!/usr/bin/python
+import os
+import shutil
+import glob
+
+dirs_removed=0
+files_removed=0
+
+def remove_dir(dir_remove):
+    global dirs_removed
+    dirs_removed += 1
+    print "Removing {0}".format(dir_remove)
+    shutil.rmtree(dir_remove)
+
+def remove_file(file_to_remove):
+    global files_removed
+    files_removed += 1
+    os.remove(file_to_remove)
+
+def cleanup_folders_when_matched(files_predicate, remove_list):
+    def candidates():
+        for root, dirs, files in os.walk('.'):
+            if files_predicate(files):
+                yield root
+
+    for candidate in candidates():
+        print "Candidate for cleanup: {0}".format(candidate)
+        to_remove_globs = [os.path.join(candidate, art) for art in artifacts]
+        print "Remove globs: {0}".format(to_remove_globs)
+        for to_remove_glob in to_remove_globs:
+            for dir_to_remove in glob.glob(to_remove_glob):
+                remove_dir(dir_to_remove)
+
+def cleanup_with_extension(extensions):
+    def candidates():
+        for root, dirs, files in os.walk('.'):
+            for name in files:
+                if any([ name.endswith(ext) for ext in extensions ]):
+                    yield os.path.join(root, name)
+
+    for candidate in candidates():
+        remove_file(candidate)
+
+
+predicate = lambda files: 'setup.py' in files
+artifacts = ['build/', 'dist/', '*.egg-info/']
+cleanup_folders_when_matched(predicate, artifacts)
+cleanup_with_extension([".pyc"])
+
+print "Removed {0} files, {1} directories".format(files_removed, dirs_removed)

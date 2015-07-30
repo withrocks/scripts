@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+apt-add-repository -y "deb http://repository.spotify.com stable non-free" &&
+apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 94558F59 &&
+apt-get update -qq &&
+apt-get install spotify-client

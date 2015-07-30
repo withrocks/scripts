@@ -1,0 +1,15 @@
+#!/bin/bash
+set -e
+newurl=$(git remote -v | grep "https:.*fetch" | awk '{ print $2 }' | sed 's#https://github.com/\(.*\)/\(.*\)#git@github.com:\1/\2#')
+
+if [ "$newurl" == "" ]; then
+  echo "Not able to parse url as https"
+  exit 1
+fi
+
+echo "New url=$newurl"
+
+git remote set-url origin $newurl
+
+echo "Done updating the remote:"
+git remote -v
