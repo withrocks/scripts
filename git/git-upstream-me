@@ -1,0 +1,47 @@
+#!/usr/bin/python
+# Creates an upstream remote based on the origin
+
+import subprocess
+import re
+import sys
+
+def remotes():
+    proc = subprocess.Popen(["git", "remote", "-v"], stdout=subprocess.PIPE)
+    for line in proc.stdout.readlines():
+        parsed = parse(line)
+        yield parsed
+
+def parse(line):
+    m = re.match(r"^(\w+)\s+git@github.com:(.+)/(.+) .*$", line)
+    if not m:
+        raise Exception("Unexpected format '{}'".format(line))
+    return dict(remote=m.group(1), username=m.group(2), project=m.group(3))
+
+def make_upstream(upstream_username):
+    all_remotes = list(remotes())
+    origin = [x for x in all_remotes if x["remote"] == "origin"]
+    if len(origin) == 0:
+        raise Exception("Can't find remote 'origin'")
+    project = origin[0]["project"]
+
+    upstream_exists = len([x for x in all_remotes if x["remote"] == "upstream"]) > 0
+    if upstream_exists:
+        print "Removing upstream..."
+        proc = subprocess.Popen(["git", "remote", "remove", "upstream"])
+        proc.wait()
+    
+    remote = "git@github.com:{}/{}".format(upstream_username, project) 
+    print "Adding remote 'upstream' {0}".format(remote)
+    proc = subprocess.Popen(["git", "remote", "add", "upstream", remote])
+    proc.wait()
+
+    proc = subprocess.Popen(["git", "remote", "-v"])
+    proc.wait()
+
+if __name__ == "__main__":
+    if len(sys.argv) == 1:
+        print "Usage: <program> <upstream_username>"
+    else:
+        upstream_username =  sys.argv[1]
+        make_upstream(upstream_username)
+
