@@ -1,3 +1,10 @@
-ln -s $(pwd)/git-sync-with-upstream /usr/local/bin/git-sync-with-upstream
-ln -s $(pwd)/git-diff-branches /usr/local/bin/git-diff-branches
+#!/bin/bash
+
+for f in "git-sync-with-upstream" "git-diff-branches" "git-upstream-me"
+do
+  echo $f
+  if [ ! -f /usr/local/bin/$f ]; then
+    ln -s $(pwd)/$f /usr/local/bin/$f
+  fi
+done
 

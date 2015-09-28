@@ -4,10 +4,8 @@ import os.path
 import re
 import sys
 
-if len(sys.argv) > 1:
-    minimum = int(sys.argv[1])
-else:
-    minimum = 1000000
+path = sys.argv[1] if len(sys.argv) > 1 else "~"
+minimum = int(sys.argv[2]) if len(sys.argv) > 2 else 1000000
 
 print "Usage exceeding {0} bytes".format(minimum)
 
@@ -26,7 +24,7 @@ def get_data(path):
         if match:
             yield int(match.groups()[0]), match.groups()[1]
 
-data = get_data("~")
+data = get_data(path)
 data = (entry for entry in data if entry[0] >= minimum)
 for entry in sorted(data, reverse=True):
     print "{0} {1}".format(entry[0], entry[1])

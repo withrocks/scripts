@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# If $1 is provided, lists public keys matching $1
+# Otherwise, lists all of the default public keys in hexadecimal and raw format
+
+
+
+
+
