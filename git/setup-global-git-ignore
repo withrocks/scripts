@@ -1,0 +1,4 @@
+#!/bin/bash
+HERE=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+cp "$HERE/gitignore_global.templ" ~/.gitignore_global
+git config --global core.excludesfile ~/.gitignore_global
