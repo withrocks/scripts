@@ -1,0 +1,5 @@
+#!/bin/bash
+
+cp -f ./vimrc ~/.vimrc
+mkdir -p ~/.vim/colors
+cp ./_vim/colors/distinguished.vim ~/.vim/colors/
