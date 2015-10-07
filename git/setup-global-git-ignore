@@ -1,4 +1,9 @@
 #!/bin/bash
+IGNORE_PATH=~/.gitignore_global
 HERE=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-cp "$HERE/gitignore_global.templ" ~/.gitignore_global
-git config --global core.excludesfile ~/.gitignore_global
+cp "$HERE/gitignore_global.templ" $IGNORE_PATH
+git config --global core.excludesfile $IGNORE_PATH
+
+echo "Setup $IGNORE_PATH with:"
+cat $IGNORE_PATH
+
