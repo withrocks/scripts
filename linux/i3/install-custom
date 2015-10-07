@@ -1,0 +1,4 @@
+cp -f config_templ ~/.i3/config
+
+echo "Reloading the config"
+i3-msg reload
