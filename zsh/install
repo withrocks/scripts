@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# cp ./_zshrc ~/.zshrc
+# echo "Installed default zsh config file"
+
+if [ -d ~/.oh-my-zsh ]; then
+  echo "Oh my zsh is already installed"
+else
+  echo "Installing Oh my zsh..."
+  sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+fi
+
