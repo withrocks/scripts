@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if grep -q "org.gnome.desktop.background show-desktop-icons false" ~/.bashrc; then
+echo "Setting already exists in .bashrc"
+else
+echo "Appending to .bashrc"
+cat << EOF >> ~/.bashrc
+# if .i3 is installed, we want to disable the desktop, so it doesn't show up if we run nautilus
+if [ "$DESKTOP_SESSION" == "i3" ]; then
+  gsettings set org.gnome.desktop.background show-desktop-icons false
+fi
+EOF
+fi
