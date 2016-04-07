@@ -1,0 +1,16 @@
+git
+---
+git stash -k: Stash files that haven't been staged
+git branch --no-merged <b>
+
+vim
+---
+zR: Unfold all
+zf: fold
+
+"ayw: Yank the word into register `a`
+:reg: Dump the content of all registers
+
+(Need the foldsearch plugin)
+:Fw: Fold all lines containing word
+
