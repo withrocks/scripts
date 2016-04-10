@@ -1,0 +1,5 @@
+cp _tmux.conf ~/.tmux.conf
+
+echo "Killing all instances of tmux..."
+killall tmux
+
