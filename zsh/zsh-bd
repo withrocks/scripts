@@ -1,0 +1,12 @@
+#!/bin/bash
+
+
+if [ ! -f $HOME/.zsh/plugins/bd/bd.zsh ]; then
+    mkdir -p $HOME/.zsh/plugins/bd
+    echo "Downloading bd.zsh..."
+    curl https://raw.githubusercontent.com/Tarrasch/zsh-bd/master/bd.zsh > $HOME/.zsh/plugins/bd/bd.zsh
+    echo -- "\n# zsh-bd\n. \$HOME/.zsh/plugins/bd/bd.zsh" >> $HOME/.zshrc
+else
+    echo "bd.zsh has already been installed"
+fi
+
