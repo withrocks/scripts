@@ -14,3 +14,6 @@ zf: fold
 (Need the foldsearch plugin)
 :Fw: Fold all lines containing word
 
+Open files in tabs:
+$ vi -p file1 file2
+
