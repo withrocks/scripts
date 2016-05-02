@@ -1,19 +1,19 @@
 git
 ---
-git stash -k: Stash files that haven't been staged
-git branch --no-merged <b>
+Stash files that haven't been staged: `git stash -k`
 
-vim
+`git branch --no-merged <b>`
+
+vi
 ---
-zR: Unfold all
-zf: fold
+Unfold all: `zR`
 
-"ayw: Yank the word into register `a`
-:reg: Dump the content of all registers
+Fold: `zf`
 
-(Need the foldsearch plugin)
-:Fw: Fold all lines containing word
+Yank a word into register `a`: `"ayw`
 
-Open files in tabs:
-$ vi -p file1 file2
+Dump the content of all registers: `:reg`
 
+Open files in tabs: `$ vi -p file1 file2`
+
+`:Fw` Fold all lines not containing the current word (requires the foldsearch plugin)
