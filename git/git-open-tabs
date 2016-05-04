@@ -1,0 +1,2 @@
+#!/bin/bash
+vi -p $(git status -s | grep -v '^??' | awk '{print $2'})
