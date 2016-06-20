@@ -13,6 +13,9 @@ do
   fi
 done
 
-echo "Installing ~/.gitconfig"
+echo "Installing ~/.gitconfig..."
 cp ./_gitconfig ~/.gitconfig
+
+echo "Installing diff-so-fancy..."
+npm install -g diff-so-fancy
 

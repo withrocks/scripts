@@ -1,0 +1,6 @@
+branch=chi173-Adapt-code-for-internal-report-to-test
+
+for f in `git diff $branch --name-only `
+do
+    git show $branch:$f > $f
+done
