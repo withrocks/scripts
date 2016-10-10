@@ -1,9 +1,10 @@
 #!/usr/bin/perl
 # Opens the current repo in firefox:
+# TODO: Support other than origin
 
 open(GITREMOTE, "git remote -v |") or die "Not able to start git\n";
 while(<GITREMOTE>) {
-    if (/github.com:(?<user>.*)\/(?<repo>.*)\.git.*\(fetch\)$/) {
+    if (/origin.*github.com:(?<user>.*)\/(?<repo>.*)\.git.*\(fetch\)$/) {
         $url = "https://github.com/$+{user}/$+{repo}";
         print "Starting $url...\n";
         system("firefox $url");
