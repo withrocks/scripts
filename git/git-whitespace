@@ -1,1 +1,1 @@
-git status -s | grep "^ M" | awk ' { print $2 } ' | xargs -i sed -i.sed 's/\s\+$//' {}
+git status -s | grep -v "??" | awk ' { print $2 } ' | xargs -i sed -i 's/\s\+$//' {}

@@ -1,10 +1,21 @@
 #!/bin/bash
 
-for f in "git-sync-with-upstream" "git-diff-branches" "git-upstream-me"
+if [ "$(id -u)" != "0" ]; then
+    echo "You need to be root"
+    exit 1
+fi
+
+for f in $(ls git-*)
 do
-  echo $f
+  echo "Installing $f"
   if [ ! -f /usr/local/bin/$f ]; then
     ln -s $(pwd)/$f /usr/local/bin/$f
   fi
 done
+
+echo "Installing ~/.gitconfig..."
+cp ./_gitconfig ~/.gitconfig
+
+echo "Installing diff-so-fancy..."
+npm install -g diff-so-fancy
 

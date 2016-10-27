@@ -1,0 +1,2 @@
+# Removes trailing whitespace in all files in a git repo
+git ls-files | xargs -i sed -i 's/\s\+$//' {}

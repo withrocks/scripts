@@ -1,3 +1,20 @@
+""" Vundle start
+
+""" When adding bundles, restart vim and run :PluginInstall
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'tpope/vim-fugitive'
+Plugin 'embear/vim-foldsearch'
+Plugin 'qpkorr/vim-renamer'
+Plugin 'will133/vim-dirdiff'
+call vundle#end()
+filetype plugin indent on
+""" Vundle end
+
 syntax on
 colorscheme distinguished
 
@@ -5,3 +22,15 @@ set tabstop=4
 set shiftwidth=4
 set softtabstop=0
 set expandtab
+
+:command! Diffnows set diffopt+=iwhite
+:command! Diffws set diffopt-=iwhite
+
+" When in diff mode, remove everything but the selected text
+" TODO: Do this only when in diff mode
+"if &diff
+:vnoremap <F6> "ayggdG"ap :diffupdate<CR>
+"endif
+
+" Wrap lines in vimdiff:
+au VimEnter * if &diff | execute 'windo set wrap' | endif

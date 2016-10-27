@@ -3,3 +3,14 @@
 cp -f ./vimrc ~/.vimrc
 mkdir -p ~/.vim/colors
 cp ./_vim/colors/distinguished.vim ~/.vim/colors/
+
+# Install the vundle plugin (package management)
+if [ ! -d ~/.vim/bundle/Vundle.vim ]; then
+  echo "Installing Vundle.vim from github..."
+  git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+else
+  echo "Vundle.vim already exists in ~/.vim/bundle"
+fi
+
+echo "Installing all registered plugins..."
+vim +PluginInstall +qall
