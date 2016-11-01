@@ -1,0 +1,4 @@
+#!/bin/bash
+
+markdown-to-slides test.md -o test.html
+
