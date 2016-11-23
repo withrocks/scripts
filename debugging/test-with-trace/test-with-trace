@@ -5,6 +5,7 @@ current_branch=`git branch | grep "^*" | awk '{print $2}'`
 test_name=$1
 branch1=$2
 branch2=$3
+ignore=$4  # TODO: Option
 
 if [ -z "$test_name" ]; then
     echo "Usage: test-with-trace [test_name] <branch1> <branch2>"
@@ -25,24 +26,24 @@ function test_on_branch {
     git checkout $1
     find . -name "*.pyc" -delete
     mkdir -p "./trace"
-    tracefile="./trace/$1.txt"
+    tracefile="./trace/$2"
     echo "Writing output to $tracefile"
-    test-with-trace.py $test_name > $tracefile
+    test-with-trace.py $test_name $ignore > $tracefile 
     # Normalize line-numbers:
-    perl -i -pe "s/^(.+.py)\((\d+)\)/\1(*)/" $tracefile
+    perl -pe "s/^(.+.py)\((\d+)\)/\1(*)/" $tracefile > $tracefile.norm
 }
 
-test_on_branch $branch1
+test_on_branch $branch1 "from"
 
 if [ -z "$branch2" ]; then
     echo "branch2 not set"
 else
-    test_on_branch $branch2
+    test_on_branch $branch2 "to"
 fi
 
 echo "Switching back to $current_branch..."
 git checkout $current_branch
 
 if [ ! -z "$branch2" ]; then
-    vimdiff "./trace/$branch1.txt" "./trace/$branch2.txt"
+    vimdiff "./trace/from.norm" "./trace/to.norm"
 fi
