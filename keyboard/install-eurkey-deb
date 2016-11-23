@@ -1,0 +1,5 @@
+#!/bin/bash
+wget http://eurkey.steffen.bruentjen.eu/download/debian/binary/eurkey.deb
+sudo dpkg -i eurkey.deb
+setxkbmap eurkey
+

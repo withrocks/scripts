@@ -1,0 +1,27 @@
+#!/bin/bash
+
+function us_is
+{
+    echo "Setting keyboard map to us,is"
+    setxkbmap -model pc105 -layout us,is -option grp:alt_shift_toggle
+}
+
+function eurkey
+{
+    echo "Setting keyboard map to eurkey,is"
+    setxkbmap -model pc105 -layout eurkey,is -option grp:alt_shift_toggle
+}
+
+echo "Before"
+setxkbmap -query
+if grep -q "eurkey" /usr/share/X11/xkb/rules/evdev.xml; then
+    echo "Found eurkey, using that"
+    eurkey
+else
+    echo "Didn't find eurkey, defualt to us,is"
+    us_is
+fi
+
+echo "After"
+setxkbmap -query
+
