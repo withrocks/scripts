@@ -8,9 +8,7 @@ fi
 for f in $(ls git-*)
 do
   echo "Installing $f"
-  if [ ! -f /usr/local/bin/$f ]; then
-    ln -s $(pwd)/$f /usr/local/bin/$f
-  fi
+  cp -f "$(pwd)/$f" "/usr/local/bin/$f"
 done
 
 echo "Installing ~/.gitconfig..."
