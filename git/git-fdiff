@@ -1,0 +1,13 @@
+#!/bin/bash
+# git-fdiff: Feature diff.
+# Shows diff of this feature branch (assuming that `develop` is the main branch)
+
+if [ -z "$1" ]; then
+    branch=HEAD
+else
+    branch=$1
+fi
+
+# Run this from a feature branch to report changes in it based
+# on the best common ancestor between the two
+git diff `git merge-base $branch develop` $branch
