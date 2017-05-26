@@ -1,0 +1,62 @@
+#!/bin/bash
+# TODO: Create a tool that generates these from a simpler configuration
+set -e
+
+SESSION=env
+
+if [ "$1" == "-f" ]; then
+    FORCE=0
+else
+    FORCE=1
+fi
+
+if [ -z $TMUX ]; then
+    SWITCH=1
+else
+    echo "in tmux"
+    SWITCH=0
+fi
+
+function create_session {
+    tmux -2 new-session -d -s $SESSION
+    tmux new-window -t $SESSION:1 -n 'proj1'
+    tmux send-keys "cd ~/source/proj1" C-m
+
+    tmux new-window -t $SESSION:2 -n 'proj2'
+    tmux send-keys "cd ~/source/proj2" C-m
+
+    tmux select-window -t $SESSION:1
+}
+
+function attach_session {
+    tmux -2 attach-session -t $SESSION
+}
+
+function kill_session {
+    tmux kill-session -t $SESSION
+}
+
+function switch_session {
+    tmux switch -t $SESSION
+}
+
+# TODO: Switch session too
+if tmux has-session -t $SESSION; then
+    echo "session exists"
+
+    if [ $FORCE -eq 0 ]; then
+        echo "Killing session (-f set)"
+        kill_session
+        create_session
+    fi
+else
+    echo "session doesn't exist"
+    create_session
+fi
+
+if [ $SWITCH -eq 0 ]; then
+    switch_session
+else
+    attach_session
+fi
+
