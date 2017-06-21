@@ -1,0 +1,71 @@
+#!/usr/bin/env python
+
+# Assumes that you've installed # Assumes that your pull request are of the format `<ticket id> - <desc>`
+from __future__ import print_function
+import subprocess
+import os
+import re
+import sys
+
+FEATURE_PATTERN = re.compile(r"^(?P<issue_id>\d+)-.+$")
+GITHUB_LINE_PATTERN = re.compile(r"^.+#(?P<pull_id>(\d+))\s+(?P<description>.+)")
+GITHUB_DESC_PATTERN = re.compile(r"(?P<issue_id>\d+)\s*-\s*(?P<description>.+)")
+
+def enum_branches():
+    # Lists branches by committerdate
+    cmd = ["git", "branch", "--sort=-committerdate"]  #  xargs -I {} git-ahead-behind {}
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    for line in iter(proc.stdout.readline, b''):  # TODO b'' in py3?
+        line = line.rstrip()[2:]
+        yield line.decode()
+
+def enum_features():
+    for branch in enum_branches():
+        m = FEATURE_PATTERN.match(branch)
+        if m:
+            yield m.groupdict()["issue_id"], branch
+
+def ahead_behind(branch, base="upstream/develop"):
+    ahead, behind = 0, 0
+    cmd = ["git", "rev-list", "--left-right", "{}...{}".format(branch, base)]
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    for line in iter(proc.stdout.readline, b''):
+        if line.startswith(b"<"):
+            ahead += 1
+        else:
+            behind += 1
+    return ahead, behind
+
+def github_pulls():
+    cmd = ["hub", "issue", "--include-pulls"]
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    for line in iter(proc.stdout.readline, b''):
+        line = line.rstrip().decode()
+        parsed_line = GITHUB_LINE_PATTERN.match(line).groupdict()
+        # Check if the line is well formed:
+        m = GITHUB_DESC_PATTERN.match(parsed_line["description"])
+        if m:
+            issue_desc = m.groupdict()
+            parsed_line["issue_id"] = issue_desc["issue_id"]
+            parsed_line["description"] = issue_desc["description"]
+        yield parsed_line
+
+def github_pulls_by_issue():
+    ret = dict()
+    for pull in github_pulls():
+        issue_id = pull["issue_id"] if "issue_id" in pull else None
+        ret.setdefault(issue_id, list())
+        ret[issue_id].append(pull)
+    return ret
+
+def list_features(include_github=False):
+    pulls = github_pulls_by_issue() if include_github else dict()
+    for issue_id, branch in enum_features():
+        ahead, behind = ahead_behind(branch)
+        pulls_for_issue = ", ".join([p["pull_id"] for p in pulls.get(issue_id, [])])
+        print("{:<40} {} {} {}".format(branch, ahead, behind, pulls_for_issue))
+    print()
+
+include_github = len(sys.argv) > 1 and sys.argv[1] == "--gh"
+list_features(include_github)
+
