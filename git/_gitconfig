@@ -1,10 +1,9 @@
 [user]
-	email = withrocks@users.noreply.github.com
-	name = withrocks
+	email = costeinar@gmail.com
+	name = Steinar Sturlaugsson
 
 [core]
 	excludesfile = ~/.gitignore_global
-	pager = diff-so-fancy | less --tabs=4 -RFX
 
 [alias]
     lg = !"git lg1"
@@ -24,3 +23,5 @@
 
 [difftool]
 	prompt = false
+[push]
+	default = simple
