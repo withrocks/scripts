@@ -2,20 +2,27 @@
 set -e
 
 # Integrates several feature branches into the integration branch
+# TODO: Ensure that the integration branch is not develop or master
+# TODO: Allow the base branch to differ from develop
+
 if [ -z $1 ]; then
   echo "Usage: git-integrate BRANCH"
   exit 1
 fi
 
 int_branch=$1
-base_branch=develop  # TODO: from command line
+base_branch=develop
+
 echo "Integration branch $int_branch. Based on $base_branch"
 
+git fetch upstream
+git checkout $base_branch
+git merge upstream/$base_branch
 git checkout $int_branch
 git reset --hard $base_branch
 
 echo "Merging all pull requests"
 
 for branch in `git-list-features --gh | awk '$4 {print $1}'`; do
-    git merge $branch -m "Automatically merged branch $branch into the integration branch $int_branch"
+    git merge $branch --no-ff -m "Automatically merged branch $branch into the integration branch $int_branch"
 done
