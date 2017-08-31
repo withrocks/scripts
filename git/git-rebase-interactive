@@ -8,4 +8,4 @@ fi
 
 # Assumes that feature branches are always branched off 'develop'
 # Send in a branch as argument to use another branch to compare to.
-git rebase -i `git merge-base HEAD $mainbranch`
+git rebase -i --autosquash `git merge-base HEAD $mainbranch`
