@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Move windows in an editor
+tmpfile=$(mktemp)
+tmux list-windows > $tmpfile
+$EDITOR $tmpfile
+
+# Move all windows to 50..x in the order you just specified
+# Assumes you don't have 50 windows already(!)
+cat $tmpfile | awk -F ":" '{ print " -s " $1 " -t 5" NR-1 }' |\
+  xargs -I {} sh -c 'tmux move-window -d {}'
+
+# Move them back down, retaining the order
+tmux move-window -d -r
+rm $tmpfile
