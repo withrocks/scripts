@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Usage: tmux-move-windows
+
 # Move windows in an editor
 tmpfile=$(mktemp)
 tmux list-windows > $tmpfile
