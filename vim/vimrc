@@ -6,11 +6,43 @@ filetype off                  " required
 
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
+" Internals
+Plugin 'tpope/vim-dispatch'  " asynchronous build and test dispatcher
+Plugin 'tpope/vim-unimpaired'
 Plugin 'VundleVim/Vundle.vim'
+
+" Code
+Plugin 'tpope/vim-commentary'  " Comment out stuff
+
+" Git
 Plugin 'tpope/vim-fugitive'
+
+" ?
+Plugin 'L9'
+Plugin 'idanarye/vim-merginal'
 Plugin 'embear/vim-foldsearch'
 Plugin 'qpkorr/vim-renamer'
 Plugin 'will133/vim-dirdiff'
+
+" SQL
+Plugin 'vim-scripts/dbext.vim'
+
+" Python
+Plugin 'tmhedberg/SimpylFold'  " python folding
+Plugin 'vim-scripts/indentpython.vim'
+Plugin 'nvie/vim-flake8'
+
+" File browsing etc
+Plugin 'scrooloose/nerdtree'  " A file browser on the left
+Plugin 'kien/ctrlp.vim'  " Fuzzy search for files
+Plugin 'mileszs/ack.vim'
+Plugin 'vim-scripts/FuzzyFinder'
+
+" Testing, building etc.
+Plugin 'janko-m/vim-test'
+
+" Wait
+"Plugin 'powerline/powerline'  " Status bar
 call vundle#end()
 filetype plugin indent on
 """ Vundle end
@@ -34,3 +66,123 @@ set expandtab
 
 " Wrap lines in vimdiff:
 au VimEnter * if &diff | execute 'windo set wrap' | endif
+
+" Or, let's just wrap it all:
+set wrap
+
+nmap ,f :FufFileWithCurrentBufferDir<CR>
+nmap ,b :FufBuffer<CR>
+nmap ,t :FufTaggedFile<CR>
+
+augroup XML
+    autocmd!
+    autocmd FileType xml setlocal foldmethod=indent foldlevelstart=999 foldminlines=0
+augroup END
+
+set number
+
+" Find files etc:
+set path+=**  " Search subdirectories
+set wildmenu  " Show all matches
+
+let g:ack_default_options=' -s -H --nopager --nocolor --nogroup --column --ignore-file=is:tags'
+" TODO: Run based on extension
+nnoremap ,p :! python ./%<CR>
+
+autocmd BufRead,BufNewFile {*.markdown,*.mdown,*.mkdn,*.md,*.mkd,*.mdwn,*.mdtxt,*.mdtext,*.text} set filetype=markdown
+autocmd FileType markdown setlocal syntax=off spell
+
+" Database connections
+let g:dbext_default_profile_NAME1 = '...'
+let g:dbext_default_profile_NAME2 = '...'
+"let g:dbext_default_profile = 'NAME1'
+
+" Yank should copy to the clipboard
+set clipboard=unnamedplus
+
+""" Evaluation """
+command! -complete=shellcmd -nargs=+ Shell call s:RunShellCommand(<q-args>)
+function! s:RunShellCommand(cmdline)
+  echo a:cmdline
+  let expanded_cmdline = a:cmdline
+  for part in split(a:cmdline, ' ')
+     if part[0] =~ '\v[%#<]'
+        let expanded_part = fnameescape(expand(part))
+        let expanded_cmdline = substitute(expanded_cmdline, part, expanded_part, '')
+     endif
+  endfor
+  botright new
+  setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap
+  call setline(1, 'You entered:    ' . a:cmdline)
+  call setline(2, 'Expanded Form:  ' .expanded_cmdline)
+  call setline(3,substitute(getline(2),'.','=','g'))
+  execute '$read !'. expanded_cmdline
+  setlocal nomodifiable
+  1
+endfunction
+
+" Move faster between split panes (skip control-w)
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+
+" Enable folding
+set foldmethod=indent
+set foldlevel=99
+
+" Enable folding with the spacebar
+nnoremap <space> za
+
+" We want docstrings for folded py code:
+let g:SimpylFold_docstring_preview=1
+
+""" Python specific """
+
+" Not working for some reason
+" " Ensure PEP8 for py files:
+" au BufNewFile,BufRead *.py \
+"     " \ set tabstop=4
+"     " \ set softtabstop=4
+"     " \ set shiftwidth=4
+"     " \ set textwidth=79
+"     " \ set expandtab
+"     " \ set autoindent
+"     " \ set fileformat=unix
+
+au BufNewFile,BufRead *.js, *.html, *.css
+    \ set tabstop=2
+    \ set softtabstop=2
+    \ set shiftwidth=2
+
+set encoding=utf-8
+set paste
+
+" py3 << EOF
+" import os
+" import sys
+" if 'VIRTUAL_ENV' in os.environ:
+"   project_base_dir = os.environ['VIRTUAL_ENV']
+"   activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
+"   execfile(activate_this, dict(__file__=activate_this))
+" EOF
+
+""" File browsing, searching etc """
+let NERDTreeIgnore = ['\.pyc$', '\.egg-info$']
+nnoremap <F4> :NERDTreeToggle<CR>
+
+" Ignore files in e.g. CtrlP:
+set wildignore+=*.pyc,*.zip,*.swp
+
+""" Git """
+nnoremap <F2> :Gstatus<CR>
+
+""" Testing """
+let test#strategy = "dispatch"  " Use Dispatch when testing
+
+""" Searching """
+noremap <F3> :Ack <cword><cr>
+let g:ack_use_dispatch=1
+" Use ag instead of ack(!)
+let g:ackprg='ag --nogroup --nocolor --column'
+
