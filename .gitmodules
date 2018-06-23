@@ -1,0 +1,3 @@
+[submodule "keyboard/EurKEY-Mac"]
+	path = keyboard/EurKEY-Mac
+	url = https://github.com/lbschenkel/EurKEY-Mac
