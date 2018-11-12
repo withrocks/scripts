@@ -1,0 +1,2 @@
+git diff-tree --no-commit-id --name-only -r "$@" | xargs -i sed -i 's/\s\+$//' {}
+
