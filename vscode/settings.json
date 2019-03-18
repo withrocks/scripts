@@ -1,0 +1,8 @@
+{
+    "workbench.colorTheme": "Monokai",
+    "editor.minimap.enabled": false,
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "window.zoomLevel": 1,
+    "python.venvPath": "~/.virtualenvs",
+    "explorer.confirmDelete": false
+}

@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Prints git status of changed files with "log follow" information of the specified
+# depth. Helpful for finding related commits e.g. when doing fixup.
+
+depth=$1
+
+if [ -z $depth ]; then
+    depth=1
+fi
+
+for path in $(git status -s | grep "^ M" | awk '{print $2}'); do
+    echo $path
+    echo ---------
+    git --no-pager log --pretty=oneline --follow -$depth -- $path
+    echo
+done
+
+

@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Commits the entire repo changes with the message "reb", i.e.
+# marking it as temp changes to be rebased.
+# If the first argument is push, also pushes the changes to the current upstream.
+
+git add $(git rev-parse --show-toplevel)
+git commit -m reb
+
+if [ "$1" == "push" ]; then
+  echo "Pushing..."
+  branch=$(git rev-parse --abbrev-ref HEAD)
+
+  case $branch in
+          master|develop|hotfix) echo "Can only push feature branches!" ;;
+          *) git push ;;
+  esac
+fi
+

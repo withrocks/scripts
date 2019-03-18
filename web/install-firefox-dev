@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e
+
+cp -f ./firefox-dev /usr/local/bin/firefox-dev
+chmod +x /usr/local/bin/firefox-dev
+

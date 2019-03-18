@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Starts firefox using the profile `dev`. If the profile doesn't exist, the profile manager will be shown
+
+firefox -P dev

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    cp settings.json $HOME/.config/Code/User/
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    cp settings.json "$HOME/Library/Application Support/Code/User/"
+else
+    echo "OS not supported"
+    exit 1
+fi
+
