@@ -4,8 +4,10 @@
 # marking it as temp changes to be rebased.
 # If the first argument is push, also pushes the changes to the current upstream.
 
+msg=${1:-reb}
+
 git add $(git rev-parse --show-toplevel)
-git commit -m reb
+git commit --no-verify -m "$msg"
 
 if [ "$1" == "push" ]; then
   echo "Pushing..."
