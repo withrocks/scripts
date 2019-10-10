@@ -17,3 +17,10 @@ Dump the content of all registers: `:reg`
 Open files in tabs: `$ vi -p file1 file2`
 
 `:Fw` Fold all lines not containing the current word (requires the foldsearch plugin)
+
+python
+------
+
+Profile a slow pip install:
+
+    python -m cProfile -o profile.txt ~/.pyenv/versions/env/bin/pip install -e ".[dev,tests,optional]"
