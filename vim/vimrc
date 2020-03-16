@@ -1,125 +1,128 @@
-""" Vundle start
+set nocompatible hidden laststatus=2
+set backspace=indent,eol,start
 
-""" When adding bundles, restart vim and run :PluginInstall
-set nocompatible              " be iMproved, required
-filetype off                  " required
+let mapleader = ","
 
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-" Internals
-Plugin 'tpope/vim-dispatch'  " asynchronous build and test dispatcher
-Plugin 'tpope/vim-unimpaired'
-Plugin 'VundleVim/Vundle.vim'
+" TODO: Don't use tmp
 
-" Code
-Plugin 'tpope/vim-commentary'  " Comment out stuff
+if !filereadable('/tmp/plug.vim')
+  silent !curl --insecure -fLo /tmp/plug.vim
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+endif
+
+source /tmp/plug.vim
+
+call plug#begin('~/.vim/plugged')
+
+Plug 'tpope/vim-surround'
+
+" Match XML tags
+ Plug 'tmhedberg/matchit'
+
+" LSP support
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/async.vim'
+Plug 'prabirshrestha/vim-lsp'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
+
+"" Testing this also, since using nvim anyways:
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+" (Optional) Multi-entry selection UI.
+Plug 'junegunn/fzf'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+
+
+" Internals 
+Plug 'tpope/vim-dispatch'  " asynchronous build and test dispatcher
+Plug 'tpope/vim-unimpaired'
+Plug 'VundleVim/Vundle.vim'
+Plug 'tpope/vim-repeat'  " Repeat non-builtin commands with .
+
+" Code 
+Plug 'tpope/vim-commentary'  " Comment out stuff
 
 " Git
-Plugin 'tpope/vim-fugitive'
+Plug 'tpope/vim-fugitive'
+Plug 'junegunn/gv.vim'  " Browse commits
 
-" ?
-Plugin 'L9'
-Plugin 'idanarye/vim-merginal'
-Plugin 'embear/vim-foldsearch'
-Plugin 'qpkorr/vim-renamer'
-Plugin 'will133/vim-dirdiff'
+" Registers
+Plug 'junegunn/vim-peekaboo'
 
 " SQL
-Plugin 'vim-scripts/dbext.vim'
-
-" Python
-Plugin 'tmhedberg/SimpylFold'  " python folding
-Plugin 'vim-scripts/indentpython.vim'
-Plugin 'nvie/vim-flake8'
+" Plug 'vim-scripts/dbext.vim'
+Plug 'tpope/vim-dadbod'
 
 " File browsing etc
-Plugin 'scrooloose/nerdtree'  " A file browser on the left
-Plugin 'kien/ctrlp.vim'  " Fuzzy search for files
-Plugin 'mileszs/ack.vim'
-Plugin 'vim-scripts/FuzzyFinder'
+Plug 'scrooloose/nerdtree'
+" Plug 'kien/ctrlp.vim'  " Fuzzy search for files
+Plug 'junegunn/fzf.vim'  " Instead of ctrl-p
+Plug 'mileszs/ack.vim'
+Plug 'tpope/vim-eunuch'  " Unix commands sugar
 
-" Testing, building etc.
-Plugin 'janko-m/vim-test'
+" Schemes
+Plug 'altercation/vim-colors-solarized'
 
-" Wait
-"Plugin 'powerline/powerline'  " Status bar
-call vundle#end()
-filetype plugin indent on
-""" Vundle end
+" Debugging
+Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+Plug 'idanarye/vim-vebugger'
 
-syntax on
-colorscheme distinguished
+" Look
+Plug 'altercation/vim-colors-solarized'
+Plug 'junegunn/seoul256.vim'
+Plug 'junegunn/goyo.vim'
+Plug 'junegunn/limelight.vim'
 
-set tabstop=4
-set shiftwidth=4
-set softtabstop=0
-set expandtab
+" Python
+Plug 'alfredodeza/pytest.vim'
+Plug 'davidhalter/jedi-vim'
+Plug 'google/vim-maktaba'  " Required for vim-codefmt
+Plug 'google/vim-codefmt'
+Plug 'google/vim-glaive'  " Required for vim-codefmt
+" Plug 'psf/black'
 
-:command! Diffnows set diffopt+=iwhite
-:command! Diffws set diffopt-=iwhite
+" Javascript
+Plug 'prettier/vim-prettier'
 
-" When in diff mode, remove everything but the selected text
-" TODO: Do this only when in diff mode
-"if &diff
-:vnoremap <F6> "ayggdG"ap :diffupdate<CR>
-"endif
+" Text
+Plug 'tpope/vim-abolish'
+Plug 'brooth/far.vim'  " Find and replace
 
-" Wrap lines in vimdiff:
-au VimEnter * if &diff | execute 'windo set wrap' | endif
+" Snippets
+"Plug 'SirVer/ultisnips'
+" Plug 'honza/vim-snippets'
 
-" Or, let's just wrap it all:
-set wrap
 
-nmap ,f :FufFileWithCurrentBufferDir<CR>
-nmap ,b :FufBuffer<CR>
-nmap ,t :FufTaggedFile<CR>
+" Undo
+Plug 'sjl/gundo.vim'
 
-augroup XML
-    autocmd!
-    autocmd FileType xml setlocal foldmethod=indent foldlevelstart=999 foldminlines=0
-augroup END
+" Search
+Plug 'junegunn/vim-slash'  " makes `/` play nicer
 
-set number
 
-" Find files etc:
-set path+=**  " Search subdirectories
-set wildmenu  " Show all matches
+call plug#end()
+
+imap <c-space> <Plug>(asyncomplete_force_refresh)
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr> pumvisible() ? "\<C-y>\<cr>" : "\<cr>"
+autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+
+if executable('pyls')
+    " pip install python-language-server
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'pyls',
+        \ 'cmd': {server_info->['pyls']},
+        \ 'whitelist': ['python'],
+        \ })
+endif
 
 let g:ack_default_options=' -s -H --nopager --nocolor --nogroup --column --ignore-file=is:tags'
-" TODO: Run based on extension
-nnoremap ,p :! python ./%<CR>
-
-autocmd BufRead,BufNewFile {*.markdown,*.mdown,*.mkdn,*.md,*.mkd,*.mdwn,*.mdtxt,*.mdtext,*.text} set filetype=markdown
-autocmd FileType markdown setlocal syntax=off spell
-
-" Database connections
-let g:dbext_default_profile_NAME1 = '...'
-let g:dbext_default_profile_NAME2 = '...'
-"let g:dbext_default_profile = 'NAME1'
 
 " Yank should copy to the clipboard
 set clipboard=unnamedplus
-
-""" Evaluation """
-command! -complete=shellcmd -nargs=+ Shell call s:RunShellCommand(<q-args>)
-function! s:RunShellCommand(cmdline)
-  echo a:cmdline
-  let expanded_cmdline = a:cmdline
-  for part in split(a:cmdline, ' ')
-     if part[0] =~ '\v[%#<]'
-        let expanded_part = fnameescape(expand(part))
-        let expanded_cmdline = substitute(expanded_cmdline, part, expanded_part, '')
-     endif
-  endfor
-  botright new
-  setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap
-  call setline(1, 'You entered:    ' . a:cmdline)
-  call setline(2, 'Expanded Form:  ' .expanded_cmdline)
-  call setline(3,substitute(getline(2),'.','=','g'))
-  execute '$read !'. expanded_cmdline
-  setlocal nomodifiable
-  1
-endfunction
 
 " Move faster between split panes (skip control-w)
 nnoremap <C-J> <C-W><C-J>
@@ -131,58 +134,195 @@ nnoremap <C-H> <C-W><C-H>
 set foldmethod=indent
 set foldlevel=99
 
-" Enable folding with the spacebar
-nnoremap <space> za
-
-" We want docstrings for folded py code:
-let g:SimpylFold_docstring_preview=1
-
-""" Python specific """
-
-" Not working for some reason
-" " Ensure PEP8 for py files:
-" au BufNewFile,BufRead *.py \
-"     " \ set tabstop=4
-"     " \ set softtabstop=4
-"     " \ set shiftwidth=4
-"     " \ set textwidth=79
-"     " \ set expandtab
-"     " \ set autoindent
-"     " \ set fileformat=unix
-
-au BufNewFile,BufRead *.js, *.html, *.css
-    \ set tabstop=2
-    \ set softtabstop=2
-    \ set shiftwidth=2
-
 set encoding=utf-8
-set paste
 
-" py3 << EOF
-" import os
-" import sys
-" if 'VIRTUAL_ENV' in os.environ:
-"   project_base_dir = os.environ['VIRTUAL_ENV']
-"   activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
-"   execfile(activate_this, dict(__file__=activate_this))
-" EOF
+""" File browsing (NERDTree), searching etc """
 
-""" File browsing, searching etc """
+" Can we use .gitignore instead?
 let NERDTreeIgnore = ['\.pyc$', '\.egg-info$']
-nnoremap <F4> :NERDTreeToggle<CR>
+
+" Open NERDTree and find the current buffer
+" TODO: NerdTreeFind if there is a buffer, otherwise nerdtreetoggle
+nnoremap <silent> <F4> :NERDTreeFind<cr>
+nnoremap <silent> <leader> <F4> :NERDTreeToggle<CR>
+
+" ... then close when you've selected a file
+let NERDTreeQuitOnOpen = 1
+" Close buffers that have been deleted
+let NERDTreeAutoDeleteBuffer = 1
+
+let NERDTreeMinimalUI = 1
+let NERDTreeDirArrows = 1
+
+" " Check if NERDTree is open or active
+" function! IsNERDTreeOpen()
+"   return exists("t:NERDTreeBufName") && (bufwinnr(t:NERDTreeBufName) != -1)
+" endfunction
+
+" " Call NERDTreeFind iff NERDTree is active, current window contains a modifiable
+" " file, and we're not in vimdiff
+" function! SyncTree()
+"   if &modifiable && IsNERDTreeOpen() && strlen(expand('%')) > 0 && !&diff
+"     NERDTreeFind
+"     wincmd p
+"   endif
+" endfunction
+
+" " Highlight currently open buffer in NERDTree
+" autocmd BufEnter * call SyncTree()
 
 " Ignore files in e.g. CtrlP:
-set wildignore+=*.pyc,*.zip,*.swp
+set wildignore+=*.pyc,*.zip,*.swp,node_modules/
+
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\.git$\|\.yardoc\|node_modules\|log\|tmp$',
+  \ 'file': '\.so$\|\.dat$|\.DS_Store$'
+  \ }
 
 """ Git """
-nnoremap <F2> :Gstatus<CR>
 
 """ Testing """
-let test#strategy = "dispatch"  " Use Dispatch when testing
 
 """ Searching """
-noremap <F3> :Ack <cword><cr>
-let g:ack_use_dispatch=1
-" Use ag instead of ack(!)
-let g:ackprg='ag --nogroup --nocolor --column'
+" let g:ack_use_dispatch=1
+let g:ackprg='ag --nogroup --nocolor --column -i'
+
+set tabstop=4
+set shiftwidth=4
+set softtabstop=0
+set expandtab
+
+"""""""""""" Site specific """""""""""""""''
+" TODO: run through all .vimrc* except .vimrc
+source ~/.vimrc-snpseq
+
+set guitablabel=\[%N\]\ %t\ %M
+
+" git/fugitive
+nnoremap <leader>z :Gstatus<cr> 
+
+nnoremap <leader>m :Make<cr> 
+
+" fzf 
+nmap <Leader>b :Buffers<CR>
+nmap <Leader>l :Lines<CR>
+nmap <Leader>p :Files<CR>
+nmap <Leader>x :History:<CR>
+nnoremap <C-p> :Files<CR>
+nnoremap ,f :Ag<Space>
+
+
+" Search (grep, ack or actually ag)
+:nnoremap gr :Ack! <cword><CR>
+
+" Look
+syntax enable
+set background=dark
+colorscheme solarized
+" colorscheme seoul256
+
+" Language specific
+autocmd FileType javascript.jsx setlocal commentstring={/*\ %s\ */}
+autocmd FileType javascript setlocal ts=2 sts=2 sw=2
+
+" nnoremap ,f :Ack!<Space>
+nnoremap ,t :!pytest -m now -s -v ./tests/clims/<CR>
+nnoremap ,q l(v):DB postgresql:///clims<CR>
+
+" Switch between most recently used buffers with tab
+function! SwitchBuffer()
+  b#
+endfunction
+
+nmap <Tab> :call SwitchBuffer()<CR>
+
+" Ignore case while searching, but don't ignore if there is an upper-case
+" character (smartcase)
+set ignorecase
+set smartcase
+filetype on
+filetype plugin on
+
+
+" " LSP support according to https://github.com/autozimu/LanguageClient-neovim
+" " Required for operations modifying multiple buffers like rename.
+" let g:LanguageClient_serverCommands = {
+"     \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
+"     \ 'javascript': ['javascript-typescript-stdio'],
+"     \ 'javascript.jsx': ['tcp://127.0.0.1:2089'],
+"     \ 'python': ['/usr/local/bin/pyls'],
+"     \ }
+
+" nnoremap <F5> :call LanguageClient_contextMenu()<CR>
+" " Or map each action separately
+" nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+" nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+" nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+
+let g:jsx_ext_required = 1
+autocmd FileType javascript.jsx setlocal ts=2 sts=0 sw=2 expandtab
+
+
+
+" autocomplete sanity
+set completeopt=longest,menuone
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+nnoremap <leader>w :normal! import traceback; print("HERE"); traceback.print_stack(limit=2)<ESC>
+
+" Add breakpoints in the source
+autocmd FileType python nnoremap <buffer> <leader>x :normal! oimport pdb; pdb.set_trace()<ESC>
+set wrap
+
+set colorcolumn=100
+
+autocmd! User GoyoEnter Limelight
+autocmd! User GoyoLeave Limelight!
+
+""" Snippets 
+
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+" let g:UltiSnipsExpandTrigger="<tab>"
+" let g:UltiSnipsJumpForwardTrigger="<c-b>"
+" let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" " If you want :UltiSnipsEdit to split your window.
+" let g:UltiSnipsEditSplit="vertical"
+
+" console.log the item under the cursor
+autocmd FileType javascript.jsx nnoremap <buffer> <leader>c yawoxc€kb€kbconsole.log(pi);0w<ESC>
+
+nnoremap <silent> <Leader>ag :Ag <C-R><C-W><CR>
+
+let g:python_host_prog = '/home/stest683/.pyenv/versions/neovim2/bin/python'
+let g:python3_host_prog = '/home/stest683/.pyenv/versions/neovim3/bin/python'
+let g:jedi#completions_command = "<C-N>" 
+
+
+" augroup autoformat_settings
+"   autocmd FileType python AutoFormatBuffer yapf
+" augroup END
+
+
+" Undo info 
+if !isdirectory($HOME."/.vim")
+    call mkdir($HOME."/.vim", "", 0770)
+endif
+if !isdirectory($HOME."/.vim/undo-dir")
+    call mkdir($HOME."/.vim/undo-dir", "", 0700)
+endif
+set undodir=~/.vim/undo-dir
+set undofile
+
+" 'Stamp' a yanked word over the one we're in now. Allows for the workflow
+" `yiw` => `S` e.g. when refactoring code.
+nnoremap S diw"0P
+
+
+" fzf settings
+autocmd VimEnter *
+\ command! -bang -nargs=* Ag
+\ call fzf#vim#ag(<q-args>, '', { 'options': '--bind ctrl-a:select-all,ctrl-d:deselect-all' }, <bang>0)
+
+set cursorline
 
