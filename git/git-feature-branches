@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Lists branches that look like feature branches <project>-<int>-<tail> or <int>-tail
+
+# For now, let's just keep it simple - non-feature branches never have a dash:
+
+git branch

@@ -4,7 +4,6 @@
 
 [core]
 	excludesfile = ~/.gitignore_global
-	editor = vim
 
 [alias]
     lg = !"git lg1"
@@ -25,6 +24,12 @@
     co = checkout
     cp = cherry-pick
     rb = rebase
+    rbi = rebase -i
+    rbid = rebase -i develop
+    rbim = rebase -i master
+    rbii = rebase -i integration
+    rba = rebase --abort
+    rbc = rebase --continue
 
 [diff]
 	tool = vimdiff
@@ -44,3 +49,16 @@
 	keepBackup = false
 [commit]
 	verbose = true
+
+[color "diff"]
+    # Color moved sections with yellow. The source is the darker one. The alternative is just a little lighter yellow.
+    oldMoved = "#514612" bold
+    newMoved = "#D7C054" bold
+    oldMovedAlternative = "#7D6E23" bold
+    newMovedAlternative = "#FFE772" bold
+
+[rebase]
+    autosquash = true
+
+; [pager]
+; 	diff = cat

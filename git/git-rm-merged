@@ -1,13 +1,10 @@
 #!/bin/bash
 set -e
 
-# A helper script for removing feature branches. First swithces you over to the develop branch.
-git checkout develop > /dev/null 2>&1
-
 if [ "$1" == "-f" ]; then
     CMD="xargs git branch -d "
 else
-    echo "Feature branches already merged into develop (use -f to remove these):"
+    echo "Feature branches already merged into $(git rev-parse --abbrev-ref HEAD) (use -f to remove these):"
     CMD=cat
 fi
 

@@ -1,0 +1,8 @@
+#!/bin/bash
+mkdir ~/.installed-from-source
+cd ~/.installed-from-source
+git clone https://github.com/keis/git-fixup.git
+cd git-fixup
+make install
+make install-zsh
+

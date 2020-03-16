@@ -1,0 +1,31 @@
+#!/bin/bash
+
+set -e
+
+stash_token=git-local-integrate-$(git rev-parse --abbrev-ref HEAD)
+git_root=$(git rev-parse --show-toplevel)
+# Fetch all open pull requests (even those by a different author)
+#currentwork=$(hub pr list --format "%sH %n")
+pattern="withrocks"
+currentwork=$(hub pr list --format "%sH %H %au %n" | grep $pattern | awk '{print $2}')
+
+# TODO: Probably better not to stash, as the merge may fail (or implement an abort!)
+git stash push -m $stash_token
+
+echo "Moving to the integration branch, fresh from develop..."
+git checkout -B integration develop 
+
+echo "Merge currentwork into integration..."
+for x in $currentwork; do
+    echo $x
+    git merge --no-ff -m "Merge $x into integration" $x
+done
+
+git co -
+set +e
+if git stash list | head -n 1 | grep -q $stash_token; then
+    echo "Popping stash..."
+    git stash pop
+fi
+set -e
+
