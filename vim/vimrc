@@ -46,6 +46,10 @@ Plug 'tpope/vim-commentary'  " Comment out stuff
 
 " Git
 Plug 'tpope/vim-fugitive'
+Plug 'junegunn/gv.vim'  " Browse commits
+
+" Registers
+Plug 'junegunn/vim-peekaboo'
 
 " SQL
 " Plug 'vim-scripts/dbext.vim'
@@ -73,6 +77,30 @@ Plug 'junegunn/limelight.vim'
 
 " Python
 Plug 'alfredodeza/pytest.vim'
+Plug 'davidhalter/jedi-vim'
+Plug 'google/vim-maktaba'  " Required for vim-codefmt
+Plug 'google/vim-codefmt'
+Plug 'google/vim-glaive'  " Required for vim-codefmt
+" Plug 'psf/black'
+
+" Javascript
+Plug 'prettier/vim-prettier'
+
+" Text
+Plug 'tpope/vim-abolish'
+Plug 'brooth/far.vim'  " Find and replace
+
+" Snippets
+"Plug 'SirVer/ultisnips'
+" Plug 'honza/vim-snippets'
+
+
+" Undo
+Plug 'sjl/gundo.vim'
+
+" Search
+Plug 'junegunn/vim-slash'  " makes `/` play nicer
+
 
 call plug#end()
 
@@ -171,7 +199,7 @@ source ~/.vimrc-snpseq
 set guitablabel=\[%N\]\ %t\ %M
 
 " git/fugitive
-nnoremap <leader>g :Gstatus<cr> 
+nnoremap <leader>z :Gstatus<cr> 
 
 nnoremap <leader>m :Make<cr> 
 
@@ -179,6 +207,7 @@ nnoremap <leader>m :Make<cr>
 nmap <Leader>b :Buffers<CR>
 nmap <Leader>l :Lines<CR>
 nmap <Leader>p :Files<CR>
+nmap <Leader>x :History:<CR>
 nnoremap <C-p> :Files<CR>
 nnoremap ,f :Ag<Space>
 
@@ -194,10 +223,11 @@ colorscheme solarized
 
 " Language specific
 autocmd FileType javascript.jsx setlocal commentstring={/*\ %s\ */}
+autocmd FileType javascript setlocal ts=2 sts=2 sw=2
 
 " nnoremap ,f :Ack!<Space>
 nnoremap ,t :!pytest -m now -s -v ./tests/clims/<CR>
-
+nnoremap ,q l(v):DB postgresql:///clims<CR>
 
 " Switch between most recently used buffers with tab
 function! SwitchBuffer()
@@ -248,3 +278,51 @@ set colorcolumn=100
 
 autocmd! User GoyoEnter Limelight
 autocmd! User GoyoLeave Limelight!
+
+""" Snippets 
+
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+" let g:UltiSnipsExpandTrigger="<tab>"
+" let g:UltiSnipsJumpForwardTrigger="<c-b>"
+" let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" " If you want :UltiSnipsEdit to split your window.
+" let g:UltiSnipsEditSplit="vertical"
+
+" console.log the item under the cursor
+autocmd FileType javascript.jsx nnoremap <buffer> <leader>c yawoxc€kb€kbconsole.log(pi);0w<ESC>
+
+nnoremap <silent> <Leader>ag :Ag <C-R><C-W><CR>
+
+let g:python_host_prog = '/home/stest683/.pyenv/versions/neovim2/bin/python'
+let g:python3_host_prog = '/home/stest683/.pyenv/versions/neovim3/bin/python'
+let g:jedi#completions_command = "<C-N>" 
+
+
+" augroup autoformat_settings
+"   autocmd FileType python AutoFormatBuffer yapf
+" augroup END
+
+
+" Undo info 
+if !isdirectory($HOME."/.vim")
+    call mkdir($HOME."/.vim", "", 0770)
+endif
+if !isdirectory($HOME."/.vim/undo-dir")
+    call mkdir($HOME."/.vim/undo-dir", "", 0700)
+endif
+set undodir=~/.vim/undo-dir
+set undofile
+
+" 'Stamp' a yanked word over the one we're in now. Allows for the workflow
+" `yiw` => `S` e.g. when refactoring code.
+nnoremap S diw"0P
+
+
+" fzf settings
+autocmd VimEnter *
+\ command! -bang -nargs=* Ag
+\ call fzf#vim#ag(<q-args>, '', { 'options': '--bind ctrl-a:select-all,ctrl-d:deselect-all' }, <bang>0)
+
+set cursorline
+
