@@ -1,0 +1,46 @@
+# Path to your oh-my-zsh installation.
+export ZSH=/home/stest683/.oh-my-zsh
+
+fpath=( "$HOME/.zfunctions" $fpath )
+
+ZSH_THEME=""
+
+plugins=(git)
+
+# User configuration
+
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+# export MANPATH="/usr/local/man:$MANPATH"
+
+source $ZSH/oh-my-zsh.sh
+
+set -o vi
+# Get 256 colors!
+export TERM=xterm-256color
+
+#export WORKON_HOME=~/.virtualenvs
+#source /usr/local/bin/virtualenvwrapper.sh
+
+bindkey -v
+bindkey '\e[3~' delete-char
+bindkey '^R' history-incremental-search-backward
+
+. $HOME/.zsh/plugins/bd/bd.zsh
+
+alias ack=ack-grep
+
+bindkey -M vicmd v edit-command-line
+
+export DISPLAY=:0
+source ~/.initshell
+
+unsetopt AUTO_CD
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+autoload -U promptinit; promptinit
+prompt pure
+
+export FZF_DEFAULT_COMMAND='ag -g ""'
+
+eval `dircolors /path/to/dircolorsdb`
