@@ -1,0 +1,16 @@
+#!/bin/bash
+set -e
+
+# Integrates all open pull requests into the integrate branch. Assumes that you're working against
+# the develop branch
+
+# NOTE: Requires hub, the github cli tool
+
+git fetch
+git checkout -B integrate
+git reset --hard origin/develop
+
+for branch in $(hub pr list -b develop -f '%H%n'); do
+  git merge -m "Merged $branch with git-int-prs" $branch
+done
+
