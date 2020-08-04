@@ -1,5 +1,11 @@
 #!/bin/bash
+
+layout=$(setxkbmap -query | grep 'layout' | awk '{print $2}')
+
+if [ ! "$layout" == "eurkey" ]; then
+
 wget http://eurkey.steffen.bruentjen.eu/download/debian/binary/eurkey.deb
 sudo dpkg -i eurkey.deb
 setxkbmap eurkey
 
+fi

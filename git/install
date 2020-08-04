@@ -1,20 +1,34 @@
 #!/bin/bash
 set -e
 
-if [ "$(id -u)" != "0" ]; then
-    echo "You need to be root"
-    exit 1
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+# Install the latest stable version of git
+version=$(git --version | awk '{print $3}')
+
+if [ $version != "2.28.0" ]; then
+
+echo "Installing git@2.28.0"
+sudo add-apt-repository -y ppa:git-core/ppa
+sudo apt -y update
+sudo apt -y install git
+
 fi
 
-for f in $(ls git-*)
-do
-  echo "Installing $f"
-  cp -f "$(pwd)/$f" "/usr/local/bin/$f"
-done
+create() {
 
-echo "Installing ~/.gitconfig..."
-cp ./_gitconfig ~/.gitconfig
+if [ ! -f ~/.ssh/$1 ]; then
+  echo "Creating an ssh key for $1. Protect it with a passphrase."
+  ssh-keygen -t rsa -C "${HOSTNAME}/$1" -b 4096 -f ~/.ssh/$1
+fi
 
-echo "Installing diff-so-fancy..."
-npm install -g diff-so-fancy
+chmod 600 ~/.ssh/$1
+
+}
+
+create github_com
+create gitlab_com
+
+# Copying config
+cp $DIR/_gitconfig ~/.gitconfig
 

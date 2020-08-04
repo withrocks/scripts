@@ -1,46 +1,58 @@
-# Path to your oh-my-zsh installation.
-export ZSH=/home/stest683/.oh-my-zsh
-
-fpath=( "$HOME/.zfunctions" $fpath )
-
-ZSH_THEME=""
-
-plugins=(git)
-
-# User configuration
-
-export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-# export MANPATH="/usr/local/man:$MANPATH"
-
-source $ZSH/oh-my-zsh.sh
+##########################
+# General settings
+export VISUAL=vim
+export EDITOR="$VISUAL"
+export LC_CTYPE=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 
 set -o vi
-# Get 256 colors!
-export TERM=xterm-256color
 
-#export WORKON_HOME=~/.virtualenvs
-#source /usr/local/bin/virtualenvwrapper.sh
+# Capture a tmux pane with the s command:
+alias s="tmux capture-pane -J -p -S -30000 | cat -s > ~/.ssh/tmux && vi -c ':$' ~/.ssh/tmux"
 
-bindkey -v
-bindkey '\e[3~' delete-char
-bindkey '^R' history-incremental-search-backward
-
-. $HOME/.zsh/plugins/bd/bd.zsh
-
-alias ack=ack-grep
-
-bindkey -M vicmd v edit-command-line
-
-export DISPLAY=:0
-source ~/.initshell
-
-unsetopt AUTO_CD
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+##########################
+# Theme
+fpath+=$HOME/.zsh/plugins/pure  # A minimalistic and fast prompt
 
 autoload -U promptinit; promptinit
 prompt pure
 
-export FZF_DEFAULT_COMMAND='ag -g ""'
+##########################
+# fzf
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 
-eval `dircolors /path/to/dircolorsdb`
+##########################
+# nvm 
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+##########################
+# pyenv 
+if [ -d "$HOME/.pyenv" ]; then 
+  export PYENV_ROOT="$HOME/.pyenv"
+  export PATH="$PYENV_ROOT/bin:$PATH"
+  if command -v pyenv 1>/dev/null 2>&1; then
+    eval "$(pyenv init -)"
+  fi
+  eval "$(pyenv virtualenv-init -)"
+fi
+
+##########################
+# Old settings 
+#
+#export TERM=xterm-256color
+#bindkey -v
+#bindkey '\e[3~' delete-char
+#bindkey '^R' history-incremental-search-backward
+#
+
+##########################
+# Site specific 
+#
+
+# Source site specific settings
+if [ -f ~/.zshrc-site]; then
+  source ~/.zshrc-site
+fi

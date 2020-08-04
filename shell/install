@@ -1,0 +1,26 @@
+#!/bin/bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+if ! command -v zsh $> /dev/null
+then
+echo "Installing zsh..."
+sudo apt install zsh
+fi
+
+default_shell=$(cat /etc/passwd | grep $USER | awk -F: '{print $7}')
+
+if [ "$default_shell" != "/usr/bin/zsh" ]; then
+echo "Setting zsh as the default shell for $USER"
+chsh -s /usr/bin/zsh
+fi
+
+mkdir -p "$HOME/.zsh"
+
+if [ ! -d "$HOME/.zsh/plugins/pure" ]; then
+
+git clone --depth 1 https://github.com/sindresorhus/pure.git "$HOME/.zsh/plugins/pure"
+
+fi
+
+cp $DIR/_zshrc ~/.zshrc

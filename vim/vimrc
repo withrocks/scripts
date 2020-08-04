@@ -3,21 +3,15 @@ set backspace=indent,eol,start
 
 let mapleader = ","
 
-" TODO: Don't use tmp
-
-if !filereadable('/tmp/plug.vim')
-  silent !curl --insecure -fLo /tmp/plug.vim
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-endif
-
-source /tmp/plug.vim
+" TODO: autoload didn't work
+source ~/.nvim/plug.vim
 
 call plug#begin('~/.vim/plugged')
 
 Plug 'tpope/vim-surround'
 
 " Match XML tags
- Plug 'tmhedberg/matchit'
+Plug 'tmhedberg/matchit'
 
 " LSP support
 Plug 'prabirshrestha/asyncomplete.vim'
