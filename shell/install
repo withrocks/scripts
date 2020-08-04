@@ -24,3 +24,5 @@ git clone --depth 1 https://github.com/sindresorhus/pure.git "$HOME/.zsh/plugins
 fi
 
 cp $DIR/_zshrc ~/.zshrc
+
+cp plugins/* ~/.zsh/plugins

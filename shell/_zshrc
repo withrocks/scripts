@@ -12,10 +12,7 @@ alias s="tmux capture-pane -J -p -S -30000 | cat -s > ~/.ssh/tmux && vi -c ':$' 
 
 ##########################
 # Theme
-fpath+=$HOME/.zsh/plugins/pure  # A minimalistic and fast prompt
-
-autoload -U promptinit; promptinit
-prompt pure
+[ -f ~/.zsh/plugins/setup-theme.zsh ] && source ~/.zsh/plugins/setup-theme.zsh
 
 ##########################
 # fzf
@@ -24,20 +21,11 @@ export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 
 ##########################
 # nvm 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+[ -f ~/.zsh/plugins/setup-nvm.zsh ] && source ~/.zsh/plugins/setup-nvm.zsh
 
 ##########################
 # pyenv 
-if [ -d "$HOME/.pyenv" ]; then 
-  export PYENV_ROOT="$HOME/.pyenv"
-  export PATH="$PYENV_ROOT/bin:$PATH"
-  if command -v pyenv 1>/dev/null 2>&1; then
-    eval "$(pyenv init -)"
-  fi
-  eval "$(pyenv virtualenv-init -)"
-fi
+[ -f ~/.zsh/plugins/setup-pyenv.zsh ] && source ~/.zsh/plugins/setup-pyenv.zsh
 
 ##########################
 # Old settings 
@@ -53,6 +41,6 @@ fi
 #
 
 # Source site specific settings
-if [ -f ~/.zshrc-site]; then
+if [ -f ~/.zshrc-site ]; then
   source ~/.zshrc-site
 fi

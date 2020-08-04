@@ -1,0 +1,8 @@
+#!/bin/bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+cd $DIR
+wget --no-clobber https://downloads.slack-edge.com/linux_releases/slack-desktop-4.8.0-amd64.deb
+sudo dpkg -i slack-desktop-4.8.0-amd64.deb
+
+
