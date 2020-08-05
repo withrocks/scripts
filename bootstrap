@@ -4,16 +4,13 @@ set -e
 
 sudo apt install -y curl net-tools
 
-# Install the European keyboard layout:
-
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd $DIR
-
-cd ./keyboard
-./install-eurkey-deb
-cd -
 
 ./git/install
 ./zsh/install
 ./fzf/install
 ./ag/install
+./docker/install
+
+

@@ -9,7 +9,7 @@ function us_is
 function eurkey
 {
     echo "Setting keyboard map to eurkey,is"
-    setxkbmap -model pc105 -layout eurkey,is -option grp:alt_shift_toggle
+    setxkbmap -model pc105 -layout eurkey -option grp:alt_shift_toggle
 }
 
 echo "Before"

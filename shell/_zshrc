@@ -7,6 +7,8 @@ export LC_ALL=en_US.UTF-8
 
 set -o vi
 
+bindkey '^R' history-incremental-search-backward
+
 # Capture a tmux pane with the s command:
 alias s="tmux capture-pane -J -p -S -30000 | cat -s > ~/.ssh/tmux && vi -c ':$' ~/.ssh/tmux"
 
@@ -20,24 +22,23 @@ alias s="tmux capture-pane -J -p -S -30000 | cat -s > ~/.ssh/tmux && vi -c ':$' 
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 
 ##########################
-# nvm 
+# nvm
 [ -f ~/.zsh/plugins/setup-nvm.zsh ] && source ~/.zsh/plugins/setup-nvm.zsh
 
 ##########################
-# pyenv 
+# pyenv
 [ -f ~/.zsh/plugins/setup-pyenv.zsh ] && source ~/.zsh/plugins/setup-pyenv.zsh
 
 ##########################
-# Old settings 
+# Old settings
 #
 #export TERM=xterm-256color
 #bindkey -v
 #bindkey '\e[3~' delete-char
-#bindkey '^R' history-incremental-search-backward
 #
 
 ##########################
-# Site specific 
+# Site specific
 #
 
 # Source site specific settings

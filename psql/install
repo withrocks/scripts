@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Only installs the psql client. Install database servers using dockers instead (per application)
+
+sudo apt-get install postgresql-client

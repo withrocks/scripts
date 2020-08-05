@@ -25,4 +25,4 @@ fi
 
 cp $DIR/_zshrc ~/.zshrc
 
-cp plugins/* ~/.zsh/plugins
+cp $DIR/plugins/* ~/.zsh/plugins
