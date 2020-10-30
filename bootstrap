@@ -2,7 +2,7 @@
 
 set -e
 
-sudo apt install -y curl net-tools
+sudo apt install -y curl net-tools scrot
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd $DIR
