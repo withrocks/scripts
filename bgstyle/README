@@ -1,0 +1,23 @@
+bgstyle
+
+A simple set of scripts for handling background colors in different applications.
+
+Background "style" (dark, light) is picked up from the file ~/.bgstyle.
+
+The style is not forced in any way, but applications can pick it up, e.g. by watching
+for changes of the config file.
+
+Example use case is to add this to the vim config file. This will only set the applicable style
+when the config file is read (usually at startup).
+
+```
+function! WrSetBackgroundStyle()
+  let l = system('bgstyle')
+  let l = substitute(l, '\n$', '', '')
+  let background_env=l
+  exe 'set background='.l
+endfunction
+
+call WrSetBackgroundStyle()
+```
+

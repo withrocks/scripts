@@ -1,0 +1,24 @@
+#!/bin/bash
+
+CONFIG_FILE=~/.bgstyle
+
+function get_value {
+    cat $CONFIG_FILE
+}
+
+function toggle_current {
+    current_value=$(get_value)
+
+    if [ "$current_value" == "dark" ]; then
+        echo light > $CONFIG_FILE
+    else
+        echo dark > $CONFIG_FILE
+    fi
+}
+
+if [ "$1" == "toggle" ]; then
+    toggle_current
+    get_value
+elif [ "$1" == "" ]; then
+    cat $CONFIG_FILE
+fi
