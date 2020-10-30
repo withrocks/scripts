@@ -8,4 +8,4 @@ else
     CMD=cat
 fi
 
-git branch --merged | grep -v "\(master\|develop\|next\)" | $CMD
+git branch --merged | grep -v "\(master\|develop\|next\|integration\)" | $CMD
