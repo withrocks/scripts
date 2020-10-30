@@ -24,3 +24,15 @@ fi
 cp ./vimrc ~/.config/nvim/init.vim
 
 vim +PlugInstall +qall
+
+# virtualenvs for neovim's py interpreters
+
+pyenv install 2.7.18
+pyenv virtualenv 2.7.18 neovim2
+pyenv activate neovim2
+pip install neovim
+
+pyenv install 3.8.5
+pyenv virtualenv 3.8.5 neovim3
+pyenv activate neovim3
+pip install neovim
