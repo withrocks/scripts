@@ -2,15 +2,19 @@
 
 set -e
 
-sudo apt install -y curl net-tools scrot
-
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd $DIR
 
+sudo apt install -y curl net-tools scrot
+
+./vim/install
+./apps/install
 ./git/install
-./zsh/install
+./shell/install
 ./fzf/install
 ./ag/install
 ./docker/install
+./tmux/install
+./bgstyle/install
 
 

@@ -6,4 +6,5 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 sudo cp $DIR/firefox-dev /usr/local/bin
 sudo cp $DIR/firefox-default /usr/local/bin
+sudo cp $DIR/firefox-socks /usr/local/bin
 
