@@ -16,5 +16,7 @@ sudo apt install -y curl net-tools scrot
 ./docker/install
 ./tmux/install
 ./bgstyle/install
+./pyenv/install
 
 
+./gnome/disable-gnome-keyring

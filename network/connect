@@ -1,0 +1,4 @@
+#!/bin/bash
+
+
+nmcli con up id $REMOTE_VPN --ask
