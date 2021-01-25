@@ -18,5 +18,6 @@ sudo apt install -y curl net-tools scrot sshfs
 ./bgstyle/install
 ./pyenv/install
 ./mutt/install
+./latex/install
 
 ./gnome/disable-gnome-keyring
