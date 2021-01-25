@@ -12,5 +12,5 @@ cd $DIR
 ./fzf/install
 ./ag/install
 ./docker/install
-
+./mutt/install
 
