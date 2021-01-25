@@ -1,0 +1,17 @@
+#!/bin/bash
+
+if ! command -v mutt &> /dev/null
+then
+    sudo apt install mutt
+fi
+
+mkdir -p ~/.mutt/cache/headers
+mkdir -p ~/.mutt/cache/bodies
+touch ~/.mutt/certificates
+
+mkdir -p ~/.config/mutt
+touch ~/.config/mutt/muttrc
+
+if [ ! -d ~/.mutt/colors/mutt-colors-solarized ]; then
+  git clone https://github.com/altercation/mutt-colors-solarized.git ~/.mutt/colors/mutt-colors-solarized
+fi

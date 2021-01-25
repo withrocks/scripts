@@ -17,6 +17,6 @@ sudo apt install -y curl net-tools scrot
 ./tmux/install
 ./bgstyle/install
 ./pyenv/install
-
+./mutt/install
 
 ./gnome/disable-gnome-keyring
