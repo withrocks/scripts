@@ -5,6 +5,11 @@ set -e
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd $DIR
 
+# directories
+mkdir -p ~/screenshots
+
+# packages
+
 sudo apt install -y curl net-tools scrot sshfs
 
 ./vim/install
