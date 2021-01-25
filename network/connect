@@ -1,4 +1,15 @@
 #!/bin/bash
 
-
+if [ "$REMOTE_VPN" == "" ]; then
+    echo "You must set the variable REMOTE_VPN"
+    exit 1
+fi
+echo "Connecting to VPN $REMOTE_VPN"
 nmcli con up id $REMOTE_VPN --ask
+
+
+echo "Setting up SOCKS"
+echo “Killing old instances...”
+kill -9 $(lsof -i:8123 -t) 2> /dev/null
+echo “SSHing using SOCKS protocol on port 8123...”
+ssh -D 8123 -f -C -q -N $REMOTE_USER@$REMOTE_HOST
