@@ -1,0 +1,48 @@
+general {
+        output_format = "i3bar"
+        colors = false
+        markup = pango
+        interval = 5
+        color_good = '{{ content }}'
+		color_degraded = '{{ yellow }}'
+		color_bad = '{{ red }}'
+}
+
+order += "load"
+order += "cpu_temperature 0"
+order += "disk /"
+order += "ethernet eno1"
+order += "volume master"
+order += "tztime local"
+
+load {
+        format = "<span background='{{ background_highlight }}'> %5min% CPU </span>"
+}
+
+cpu_temperature 0 {
+        format = "<span background='{{ background_highlight }}> 🌡 %degrees °C </span>"
+        path = "/sys/class/thermal/thermal_zone0/temp"
+}
+
+disk "/" {
+        format = "<span background='{{ background_highlight }}'> 🖴 %free </span>"
+}
+
+ethernet eno1 {
+        format_up = "<span background='{{ background_highlight }}'> %ip </span>"
+        format_down = "<span background='{{ background_highlight }}'> Disconnected </span>"
+}
+
+volume master {
+        format = "<span background='{{ background_highlight }}'> ♪ %volume </span>"
+        format_muted = "<span background='{{ background_highlight }}'> Muted </span>"
+        device = "default"
+        mixer = "Master"
+        mixer_idx = 0
+}
+
+tztime local {
+		format = "<span background='{{ background_highlight }}'> %time </span>"
+		format_time = " %a %-d %b %H:%M"
+}
+
