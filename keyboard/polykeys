@@ -1,0 +1,23 @@
+#!/bin/bash
+
+scheme=$1
+
+function usage {
+  echo "Usage: polykeys [eu|ru]"
+}
+
+if [ "$scheme" == "" ]; then
+  usage
+  exit 1
+elif [ "$scheme" == "eu" ]; then
+  setxkbmap -option -layout 'eu'
+  echo "Set keyboard scheme to European"
+elif [ "$scheme" == "ru" ]; then
+  # Russian phonetic keyboard
+  setxkbmap -option -option grp:switch,grp:alt_shift_toggle,grp_led:scroll,compose:menu -layout 'eu,ru' -variant ',phonetic_winkeys'
+  echo "Set keyboard scheme to European/Russian, switch with alt+shift"
+fi
+
+echo ""
+setxkbmap -query
+
